@@ -11,7 +11,7 @@ const Login = () => {
 
     
     const {setAtoken,backendUrl} = useContext(AdminContext)
-    console.log(backendUrl + '/api/admin/login')
+
     const onSubmitHandler = async (event)=>{
         event.preventDefault()
         try {
