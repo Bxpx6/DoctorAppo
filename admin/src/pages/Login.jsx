@@ -2,28 +2,34 @@ import React,{useContext, useState} from 'react'
 import { assets } from '../assets/assets'
 import { AdminContext } from '../context/AdminContext'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Login = () => {
 
     const[state,setState] = useState('Admin')
     const[email,setEmail] = useState('')
-    const[Password,setPassword] = useState('')
+    const[password,setPassword] = useState('')
 
     
-    const {setAtoken,backendUrl} = useContext(AdminContext)
+    const {setAToken,backendUrl} = useContext(AdminContext)
 
     const onSubmitHandler = async (event)=>{
+        
         event.preventDefault()
         try {
-            
             if (state === 'Admin') {
-                const {data} = await axios.post(backendUrl + '/api/admin/login', {email,Password})
+                
+                const {data} = await axios.post(backendUrl + '/api/admin/login', {email,password})
                 if(data.success){
-                    console.log(data.token)
+                    localStorage.setItem('aToken',data.token)
+                    setAToken(data.token)
+                }else{
+                    toast.error(data.message)
                 }
             }else{
-                console.log("not working")
+                
             }
+            
         } catch (error) {
             console.log(error)
         }
@@ -41,7 +47,7 @@ const Login = () => {
             </div>
             <div className='w-full'>
                 <p>Password</p>
-                <input onChange={(e)=>setPassword(e.target.value) } value={Password} className='border border-[#DADADA] rounded w-full p-2 mt-1' type="password" required />
+                <input onChange={(e)=>setPassword(e.target.value) } value={password} className='border border-[#DADADA] rounded w-full p-2 mt-1' type="password" required />
             </div>
             <button className='bg-primary text-white w-full py-2 rounded-md text-base'>Login</button>
             {
